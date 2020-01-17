@@ -27,7 +27,16 @@ h2 {
 }
 
 h3 {
-	font-size: 1.6em;
+	color: #887600;
+	font-size: 12px;
+	font-weight: bold;
+	width:90%;
+	padding-left: 10px;
+	text-shadow: 1px 0 0 #eee;
+	border-bottom:#999;
+	border-bottom-style:solid;
+	border-bottom-width: 1px;
+	margin-bottom:10px;
 }
 
 h4 {
@@ -50,7 +59,7 @@ a {
 }
 
 a:hover {
-	color: #0f75bc;
+	color: #c88000;
 }
 
 li {  margin: 0px 0px 0px 10px;
@@ -70,13 +79,24 @@ li {  margin: 0px 0px 0px 10px;
 	padding: 0;
 }
 
+#header {
+	margin: 0 auto;
+	padding: 0;
+}
+
+#a-right {
+	text-align: right;
+	float: right;
+}
+
 #header-top {
-	width: 800px;
-	background:#0f75bc;
+	width: 750px;
+	background:#c88000;
 	margin-left: auto;
 	margin-right: auto;
 	padding: 10px;
-	padding-top:20px;
+	padding-top:2px;
+	padding-bottom:2px;
 	border-width: 1px;
 	border-style: solid;
 	border-color: #999999;
@@ -86,15 +106,16 @@ li {  margin: 0px 0px 0px 10px;
 	color: #FFF;
 	text-shadow: 1px 1px 0 #666666;
 	font-family:Verdana, Geneva, sans-serif;
-	
 }
 
 #header-menu {
-	width: 800px;
+	width: 750px;
 	margin-left: auto;
 	margin-right: auto;
-	padding: 10px;
-	background:#cccccc;
+	overflow: hidden;
+	background:#f1f1f1;
+	padding-left: 10px;
+	padding-right: 10px;
 	font-size: 13px;
 	font-weight: bold;
 	border-width: 1px;
@@ -105,24 +126,38 @@ li {  margin: 0px 0px 0px 10px;
 	text-shadow: 0 1px 0 #fff;
 }
 
-#header-menu a {
-	color: #444444;
+#header-menu button {
+	text-decoration: none;
+	color: initial;
+	background-color: inherit;
+	float: left;
+	border: none;
+	border-width: 0px;
+	outline: none;
+	cursor: pointer;
+	padding: 14px 16px;
+	transition: 0.3s;
+	font-size: 14px;
 	font-weight: bold;
-	border: #999999;
 }
 
-#header-menu a:hover {
-	color:#00007f;
+#header-menu button:hover {
+	color:#c88000;
+	background-color: #ddd;
+}
+
+#header-menu button.active {
+    background-color: #ccc;
 }
 
 #footer {
 	margin-left: auto;
 	margin-right: auto;
-	width:820px;
+	width:750px;
 }
 
 #page {
-	width: 800px;
+	width: 750px;
 	margin-left: auto;
 	margin-right: auto;
 	padding:10px;
@@ -141,7 +176,7 @@ li {  margin: 0px 0px 0px 10px;
 	border-width: 1px;
 	border-style: solid;
 	font-weight: bold;
-	background-color: #e1e1e1;	
+	background-color: #e1e1e1;
 	padding: 5px;
 	font-size:12px;
 }
@@ -180,7 +215,7 @@ fieldset {
 }
 
 legend {
-	color: #0f75bc;
+	color: #c88000;
 	font-size: 14px;
 	font-weight: bold;
 	width:100%;
@@ -191,7 +226,7 @@ legend {
 	border-bottom-style:solid;
 	border-bottom-width: 1px;
 	margin-bottom:10px;
-} 
+}
 
 label {
 	padding: 4px;
@@ -204,12 +239,12 @@ label {
 input {
 	color: #666666;
 	font-size: 12px;
-	margin-right: 5px;	
+	margin-right: 5px;
 }
 
 select {
 	color: #666666;
-	font-size: 12px;	
+	font-size: 12px;
 }
 
 
@@ -224,7 +259,7 @@ select {
 
 #layerConfigDevice {
 	/*visibility: hidden;*/
-	
+
 }
 
 .LV_validation_message{
@@ -235,23 +270,23 @@ select {
 .LV_valid {
     color:#00CC00;
 }
-	
+
 .LV_invalid {
     color:#CC0000;
 }
-    
+
 .LV_valid_field,
-input.LV_valid_field:hover, 
+input.LV_valid_field:hover,
 input.LV_valid_field:active,
-textarea.LV_valid_field:hover, 
+textarea.LV_valid_field:hover,
 textarea.LV_valid_field:active {
     border: 1px solid #00CC00;
 }
-    
-.LV_invalid_field, 
-input.LV_invalid_field:hover, 
+
+.LV_invalid_field,
+input.LV_invalid_field:hover,
 input.LV_invalid_field:active,
-textarea.LV_invalid_field:hover, 
+textarea.LV_invalid_field:hover,
 textarea.LV_invalid_field:active {
     border: 1px solid #CC0000;
 }

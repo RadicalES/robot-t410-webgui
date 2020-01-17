@@ -1,32 +1,30 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+<!--
+(C) 2017-2019 Radical Electronic Systems
+R1.2
+-->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>ROBOT T410 Administration</title>
 	<link href="site.css" media="screen" rel="stylesheet" type="text/css" />
-	<script type="text/javascript" src="robotlib.js"></script>
+	<link rel="icon" href="favicon.png" type="image/png" />
+	<script type="text/javascript" src="jx.js"></script>
+	<script type="text/javascript" src="robot.js"></script>
 	<script type="text/javascript" src="validation.js"></script>
-	<script type="text/javascript">
-	<!--
-	window.onload=function(){
-		hideLayers();
-		loadHome();
-	}
-	-->
-	</script>
 </head>
 
 <body>
 
-<div id="wrapper">
-	<div id="header-top">
-    	ROBOT T410 Administration
-    </div>
+<div id="header">
+		<div id="header-top">				
+			ROBOT T410 Administration
+		</div>
 	<div id="header-menu">
-		<a href="#" onclick="loadHome();">HOME</a> &nbsp;*&nbsp;
-		<a href="#" onclick="loadApplication();">APPLICATION</a> &nbsp;*&nbsp;
-		<a href="#" onclick="loadNetworkConfig();">NETWORK</a> &nbsp;*&nbsp;
-		<a href="#" onclick="loadAdmin();">ADMIN SETUP</a>
+		<button id="homebtn" class="menuitem" onclick="loadHome()">HOME</button>
+		<button id="appbtn" class="menuitem" onclick="loadApplication()">APPLICATION</button>
+		<button id="netbtn" class="menuitem" onclick="loadNetworkConfig()">NETWORK</button>
+		<button id="adminbtn" class="menuitem" onclick="loadAdmin()">ADMIN SETUP</button>
 	</div>
 </div>
 
@@ -43,11 +41,9 @@
 				<label>Distribution:</label> <input class="readonlyTextBox" name="distro" id="distro" value="" readonly="readonly" style="width : 450px;" /><p></p>
 				<label>Linux Kernel:</label> <input class="readonlyTextBox" name="kernel" id="kernel" value="" readonly="readonly" style="width : 450px;" /><p></p>
 				<label>MAC Address:</label> <input class="readonlyTextBox" name="macaddress" id="macaddress" value="" readonly="readonly" /><p></p>
-				<input class="button" type="button" name="buttonGetDataHome" value="Refresh" onclick="refreshHome();">
-
+				<input class="button" type="button" name="buttonGetDataHome" value="Refresh" onclick="refreshHome();" />
 	  		  </fieldset>
 			  <p></p>
-
 			</form>
 		</div>
 
@@ -55,56 +51,118 @@
 			<form id="formApplication" action="" method="get" onsubmit="return saveAppConfig();">
 			  <fieldset>
 					<legend>Application Settings</legend>
-					<label>Desktop Manager:</label> <input type="checkbox" name="appdeskmode" id="appdeskmode" value="1"
-																onclick="toggleAppSettings();"
-																onchange="toggleAppSettings();"/><p></p>
-					<label>Startup Application:</label> <input class="readonlyTextBox" name="appstart" id="appstart" value="" readonly="readonly" /><p></p>
-					<label>Application Parameters:</label> <input class="readonlyTextBox" name="appparam" id="appparam" value="" style="width : 450px;" /><p></p>
-	  		</fieldset>
-			  <p></p>
-				<input class="button" type="button" name="buttonGetDataApp" value="Refresh" onclick="refreshApplication();">
-				<input class="button" type="submit" value="Save Settings" name="submit">
+					<h3>Web Browser Settings</h3>
+					<label>Startup Web URL:</label>
+					<input class="textBox" name="appsvrurl" id="appsvrurl" value="" style="width : 450px;" /><p></p>
 
+					<h3>Serial Port Web Socket Server Settings</h3>
+					<label>Enabled:</label> <input type="checkbox" name="appwsen" id="appwsen" value="TRUE"/><p></p>
+					<label>Serial Port:</label>
+					<select id="appwsport_sel" name="appwsport_sel">
+						<option value="ttyS1">Port 1</option>
+						<option value="ttyS2">Port 2</option>
+					</select> 	
+					<p></p>
+					<label>Baudrate:</label>
+					<select id="appwsbaud_sel" name="appwsbaud_sel">
+						<option value="1200">1200</option>
+						<option value="2400">2400</option>
+						<option value="4800">4800</option>
+						<option value="9600">9600</option>
+						<option value="19200">19200</option>
+						<option value="38400">38400</option>
+						<option value="57600">57600</option>
+						<option value="115200">115200</option>
+					</select> 	
+					<p></p>
+					<label>Socket Port:</label> <input class="textBox" name="appwsport_net" id="appwsport_net" value="" /><p></p>
+					<label>Allow Foreign Connections:</label> <input type="checkbox" name="appwsforeign" id="appwsforeign"/><p></p>
+					<p></p>
+			  	</fieldset>
+
+			  	<div id="layerTestWS">
+			  		<h3>Test Serial Reader Websocket</h3>
+			  		<textarea rows="20" cols="100" readonly wrap="off" id="logWs" style="align-content:left; border:1px outset #000000;"></textarea>
+			  		<p></p>
+				</div>
+
+			<p></p>
+			<input class="button" type="submit" value="Save Settings" name="submit" />
+			<input class="button" type="button" id="btnWebsock" name="btnWebsock" value="Test Websocket" onclick="testWebsocket();" />
 			</form>
 		</div>
 
 		<div id="layerNetwork">
-			<form id="formConfig" name="formConfig" action="" method="get" onsubmit="return saveNetworkConfig();">
-
+			<form id="formNetwork" name="formNetwork" action="" method="get" onsubmit="return saveNWKConfig();">
+	
 				<fieldset>
-					<legend>Network Settings</legend>
+					<legend>Network Interfaces</legend>
+					
+					<h3 id="net_wired_name">Lan</h3>
+					<label>MAC Address:</label> <input class="readonlyTextBox" name="wired_mac" readonly="readonly" id="wired_mac" value="" /><p></p>
+					<label>DHCP: </label> 	<input type="checkbox" name="wired_dhcp" id="wired_dhcp" value="1" onclick="setNetState('wired',this.checked);" /><p></p>
+					<label>IP Address:</label> <input class="textBox" name="wired_ipa" id="wired_ipa" value="" /><p></p>
+					<label>Subnet Mask:</label> <input class="textBox" name="wired_nm" id="wired_nm" value="" /><p></p>
+					<label>Default Gateway:</label> <input class="textBox" name="wired_gw" id="wired_gw" value="" /><p></p>
 
-					<label>DHCP: </label> 	<input type="checkbox" name="dhcp" id="dhcp" value="1"
-                    							onclick="toggleNetworkSettings();"
-                                                onchange="toggleNetworkSettings();"/><p></p>
-					<label>IP Address:</label> <input class="textBox" name="ipaddress" id="ipaddress" value="" /><p></p>
-					<label>Subnet Mask:</label> <input class="textBox" name="subnet" id="subnet" value="" /><p></p>
-					<label>Default Gateway:</label> <input class="textBox" name="gateway" id="gateway" value=""><p></p>
-					<label>DNS Server:</label> <input class="textBox" name="dns" id="dns" value=""><p></p>
+					<h3 id="net_wifi_name">Wifi</h3>
+					<label>Enabled: </label> 	<input type="checkbox" name="wifi_enable" id="wifi_enable" value="1" /><p></p>
+					<label>MAC Address:</label> <input class="readonlyTextBox" name="wifi_mac" readonly="readonly" id="wifi_mac" value="" /><p></p>
+					<label>DHCP: </label> 	<input type="checkbox" name="wifi_dhcp" id="wifi_dhcp" value="1" onclick="setNetState('wifi',this.checked);" /><p></p>
+					<label>IP Address:</label> <input class="textBox" name="wifi_ipa" id="wifi_ipa" value="" /><p></p>
+					<label>Subnet Mask:</label> <input class="textBox" name="wifi_nm" id="wifi_nm" value="" /><p></p>
+					<label>Default Gateway:</label> <input class="textBox" name="wifi_gw" id="wifi_gw" value="" /><p></p>
+					<label>Access Point SSID:</label> <input class="textBox" name="wifi_ssid" id="wifi_ssid" value="" /><p></p>
+					<label>Passkey:</label> <input class="textBox" name="wifi_passkey" id="wifi_passkey" value="" style="width : 480px;"/><p></p>
+					<label>Connected Access Point:</label> <input class="textBox" name="wifi_apcon" id="wifi_apcon" readonly="readonly" value="" /><p></p>
+					<label>Access Point MAC:</label> <input class="textBox" name="wifi_apmac" id="wifi_apmac" readonly="readonly" value="" /><p></p>
+					<label>Frequency:</label> <input class="textBox" name="wifi_apfreq" id="wifi_apfreq" readonly="readonly" value="" /><p></p>
+					<label>Link Quality:</label> <input class="textBox" name="wifi_aplq" id="wifi_aplq" readonly="readonly" value="" /><p></p>
+					<label>Signal Level:</label> <input class="textBox" name="wifi_apsl" id="wifi_apsl" readonly="readonly" value="" /><p></p>
 
-
-				</fieldset>
+					<h3 id="net_general">General</h3>
+					<label>Static DNS Server:</label> <input class="textBox" name="network_dns" id="network_dns" value="" /><p></p>
+					<label>NTP Server:</label> <input class="textBox" name="network_ntp" id="network_ntp" value="" /><p></p>			
+					
+				</fieldset>				
 				<p></p>
 
-				<input class="button" type="button" name="buttonNWKReset" value="Network Default" onclick="setNWKReset();">
-				<input class="button" type="submit" value="Save Settings" name="submit">
+				<input class="button" type="button" name="buttonNWKReset" value="Network Default" onclick="resetNWKConfig();" />
+				<input class="button" type="submit" value="Save Settings" name="submit" />
+				<input class="button" type="button" name="btnNWKRestart" value="Restart Network" onclick="restartNWK();" />
+				<input class="button" type="button" name="btnWifiRestart" value="Restart Wifi" onclick="restartNWKWifi();" />
 
 				<script type="text/javascript">
-					var ipaddress = new LiveValidation( 'ipaddress', {onlyOnSubmit: false, validMessage: 'OK' } );
-					ipaddress.add( Validate.IPAddress );
-					ipaddress.add( Validate.Presence );
+					var wired_ipa = new LiveValidation( 'wired_ipa', {onlyOnSubmit: false, validMessage: 'OK' } );
+					wired_ipa.add( Validate.IPAddress );
+					wired_ipa.add( Validate.Presence );
 
-					var subnet = new LiveValidation( 'subnet', {onlyOnSubmit: false, validMessage: 'OK' } );
-					subnet.add( Validate.IPAddress );
-					subnet.add( Validate.Presence );
+					var wired_nm = new LiveValidation( 'wired_nm', {onlyOnSubmit: false, validMessage: 'OK' } );
+					wired_nm.add( Validate.IPAddress );
+					wired_nm.add( Validate.Presence );
 
-					var gateway = new LiveValidation( 'gateway', {onlyOnSubmit: false, validMessage: 'OK' } );
-					gateway.add( Validate.IPAddress );
-					gateway.add( Validate.Presence );
+					var wired_gw = new LiveValidation( 'wired_gw', {onlyOnSubmit: false, validMessage: 'OK' } );
+					wired_gw.add( Validate.IPAddress );
 
-					var dns = new LiveValidation( 'dns', {onlyOnSubmit: false, validMessage: 'OK' } );
-					dns.add( Validate.IPAddress );
-					dns.add( Validate.Presence );
+					var wifi_ipa = new LiveValidation( 'wifi_ipa', {onlyOnSubmit: false, validMessage: 'OK' } );
+					wifi_ipa.add( Validate.IPAddress );
+					wifi_ipa.add( Validate.Presence );
+
+					var wifi_nm = new LiveValidation( 'wifi_nm', {onlyOnSubmit: false, validMessage: 'OK' } );
+					wifi_nm.add( Validate.IPAddress );
+					wifi_nm.add( Validate.Presence );
+
+					var wifi_gw = new LiveValidation( 'wifi_gw', {onlyOnSubmit: false, validMessage: 'OK' } );
+					wifi_gw.add( Validate.IPAddress );
+
+					var opt = new Object;
+					opt.validMessage = "OK";
+					opt.onlyOnSubmit = true;
+					var wifi_pk = new LiveValidation('wifi_passkey', opt);
+					opt = new Object;
+					opt.maximum = 63;
+					opt.minimum = 8;
+					wifi_pk.add( Validate.Length,  opt);
 
 				</script>
 
@@ -118,13 +176,13 @@
 				<fieldset>
 					<legend>Update Password</legend>
 
-					<label>Old Password:</label>		<input class="textBox" type="password" name="passwordOld" id="passwordOld" value=""><p></p>
-					<label>New Password:</label>		<input class="textBox" type="password" name="passwordNew" id="passwordNew" value=""><p></p>
-					<label>Confirm Password:</label>	<input class="textBox" type="password" name="passwordNewConfirm" id="passwordNewConfirm" value=""><p></p>
+					<label>Old Password:</label>		<input class="textBox" type="password" name="passwordOld" id="passwordOld" value="" /><p></p>
+					<label>New Password:</label>		<input class="textBox" type="password" name="passwordNew" id="passwordNew" value="" /><p></p>
+					<label>Confirm Password:</label>	<input class="textBox" type="password" name="passwordNewConfirm" id="passwordNewConfirm" value="" /><p></p>
 				</fieldset>
 				<p></p>
 
-				<input class="button" type="submit" value="Update Password" name="submit">
+				<input class="button" type="submit" value="Update Password" name="submit" />
 
 				<script type="text/javascript">
 					var passwordOld = new LiveValidation('passwordOld');
@@ -144,7 +202,7 @@
 					<legend>Restart Device</legend>
 					Reboot the Robot safely.
 				</fieldset>
-				<input class="button" type="button" name="buttonDeviceRestart" value="Reboot Device" onclick="deviceRestart();">
+				<input class="button" type="button" name="buttonDeviceRestart" value="Reboot Device" onclick="deviceRestart();" />
 				<p></p>
 
 			</form>
@@ -154,12 +212,17 @@
 	</div>
 </div>
 <div id="footer">
-	<p class="smallText">
+	<div id="a-right" class="smallText">
+		&copy; 2020 Radical Electronic Systems.
+	<br/>
+	<div id="guiversion">
+				release: 2.0
+	</div>
+	</div>
+	<div>
+		
 		<a href="http://www.radicalsystems.co.za">www.radicalsystems.co.za</a>&nbsp;|&nbsp;<a href="mailto:info@radicalsystems.co.za">info@radicalsystems.co.za</a>
-	</p>
-	<p class="smallText">
-		&copy; 2017 Radical Electronic Systems.
-	</p>
+	</div>
 </div>
 </body>
 </html>
