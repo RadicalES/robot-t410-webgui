@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>ROBOT T410 Administration</title>
+	<link href="site.css" media="screen" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="robotlib.js"></script>
+	<script type="text/javascript" src="validation.js"></script>
+	<script type="text/javascript">
+	<!--
+	window.onload=function(){
+		hideLayers();
+		loadHome();
+	}
+	-->
+	</script>
+</head>
+
+<body>
+
+<div id="wrapper">
+	<div id="header-top">
+    	ROBOT T410 Administration
+    </div>
+	<div id="header-menu">
+		<a href="#" onclick="loadHome();">HOME</a> &nbsp;*&nbsp;
+		<a href="#" onclick="loadApplication();">APPLICATION</a> &nbsp;*&nbsp;
+		<a href="#" onclick="loadNetworkConfig();">NETWORK</a> &nbsp;*&nbsp;
+		<a href="#" onclick="loadAdmin();">ADMIN SETUP</a>
+	</div>
+</div>
+
+<div id="wrapper">
+	<div id="page">
+		<div id="errorMsg"></div>
+		<div id="statusMsg"></div>
+
+		<div id="layerHome">
+			<form id="formHome" action="" method="get" onsubmit="return saveConfigDevice();">
+			  <fieldset>
+				<legend>Robot T410 Information</legend>
+				<label>Operating System:</label> <input class="readonlyTextBox" name="operatingsystem" id="operatingsystem" value="" readonly="readonly" style="width : 450px;" /><p></p>
+				<label>Distribution:</label> <input class="readonlyTextBox" name="distro" id="distro" value="" readonly="readonly" style="width : 450px;" /><p></p>
+				<label>Linux Kernel:</label> <input class="readonlyTextBox" name="kernel" id="kernel" value="" readonly="readonly" style="width : 450px;" /><p></p>
+				<label>MAC Address:</label> <input class="readonlyTextBox" name="macaddress" id="macaddress" value="" readonly="readonly" /><p></p>
+				<input class="button" type="button" name="buttonGetDataHome" value="Refresh" onclick="refreshHome();">
+
+	  		  </fieldset>
+			  <p></p>
+
+			</form>
+		</div>
+
+		<div id="layerApplication">
+			<form id="formApplication" action="" method="get" onsubmit="return saveAppConfig();">
+			  <fieldset>
+					<legend>Application Settings</legend>
+					<label>Desktop Manager:</label> <input type="checkbox" name="appdeskmode" id="appdeskmode" value="1"
+																onclick="toggleAppSettings();"
+																onchange="toggleAppSettings();"/><p></p>
+					<label>Startup Application:</label> <input class="readonlyTextBox" name="appstart" id="appstart" value="" readonly="readonly" /><p></p>
+					<label>Application Parameters:</label> <input class="readonlyTextBox" name="appparam" id="appparam" value="" style="width : 450px;" /><p></p>
+	  		</fieldset>
+			  <p></p>
+				<input class="button" type="button" name="buttonGetDataApp" value="Refresh" onclick="refreshApplication();">
+				<input class="button" type="submit" value="Save Settings" name="submit">
+
+			</form>
+		</div>
+
+		<div id="layerNetwork">
+			<form id="formConfig" name="formConfig" action="" method="get" onsubmit="return saveNetworkConfig();">
+
+				<fieldset>
+					<legend>Network Settings</legend>
+
+					<label>DHCP: </label> 	<input type="checkbox" name="dhcp" id="dhcp" value="1"
+                    							onclick="toggleNetworkSettings();"
+                                                onchange="toggleNetworkSettings();"/><p></p>
+					<label>IP Address:</label> <input class="textBox" name="ipaddress" id="ipaddress" value="" /><p></p>
+					<label>Subnet Mask:</label> <input class="textBox" name="subnet" id="subnet" value="" /><p></p>
+					<label>Default Gateway:</label> <input class="textBox" name="gateway" id="gateway" value=""><p></p>
+					<label>DNS Server:</label> <input class="textBox" name="dns" id="dns" value=""><p></p>
+
+
+				</fieldset>
+				<p></p>
+
+				<input class="button" type="button" name="buttonNWKReset" value="Network Default" onclick="setNWKReset();">
+				<input class="button" type="submit" value="Save Settings" name="submit">
+
+				<script type="text/javascript">
+					var ipaddress = new LiveValidation( 'ipaddress', {onlyOnSubmit: false, validMessage: 'OK' } );
+					ipaddress.add( Validate.IPAddress );
+					ipaddress.add( Validate.Presence );
+
+					var subnet = new LiveValidation( 'subnet', {onlyOnSubmit: false, validMessage: 'OK' } );
+					subnet.add( Validate.IPAddress );
+					subnet.add( Validate.Presence );
+
+					var gateway = new LiveValidation( 'gateway', {onlyOnSubmit: false, validMessage: 'OK' } );
+					gateway.add( Validate.IPAddress );
+					gateway.add( Validate.Presence );
+
+					var dns = new LiveValidation( 'dns', {onlyOnSubmit: false, validMessage: 'OK' } );
+					dns.add( Validate.IPAddress );
+					dns.add( Validate.Presence );
+
+				</script>
+
+			</form>
+		</div>
+
+
+		<div id="layerAdmin">
+
+			<form id="formAdmin" action="" method="post" onsubmit="return saveAdmin();">
+				<fieldset>
+					<legend>Update Password</legend>
+
+					<label>Old Password:</label>		<input class="textBox" type="password" name="passwordOld" id="passwordOld" value=""><p></p>
+					<label>New Password:</label>		<input class="textBox" type="password" name="passwordNew" id="passwordNew" value=""><p></p>
+					<label>Confirm Password:</label>	<input class="textBox" type="password" name="passwordNewConfirm" id="passwordNewConfirm" value=""><p></p>
+				</fieldset>
+				<p></p>
+
+				<input class="button" type="submit" value="Update Password" name="submit">
+
+				<script type="text/javascript">
+					var passwordOld = new LiveValidation('passwordOld');
+					passwordOld.add( Validate.Presence );
+
+					var passwordNew = new LiveValidation('passwordNew');
+					passwordNew.add( Validate.Presence );
+
+
+					var passwordNewConfirm = new LiveValidation('passwordNewConfirm');
+					passwordNewConfirm.add(Validate.Confirmation, { match: 'passwordNew'} );
+					passwordNewConfirm.add( Validate.Presence );
+				</script>
+				<p></p>
+
+				<fieldset>
+					<legend>Restart Device</legend>
+					Reboot the Robot safely.
+				</fieldset>
+				<input class="button" type="button" name="buttonDeviceRestart" value="Reboot Device" onclick="deviceRestart();">
+				<p></p>
+
+			</form>
+
+		</div>
+
+	</div>
+</div>
+<div id="footer">
+	<p class="smallText">
+		<a href="http://www.radicalsystems.co.za">www.radicalsystems.co.za</a>&nbsp;|&nbsp;<a href="mailto:info@radicalsystems.co.za">info@radicalsystems.co.za</a>
+	</p>
+	<p class="smallText">
+		&copy; 2017 Radical Electronic Systems.
+	</p>
+</div>
+</body>
+</html>
